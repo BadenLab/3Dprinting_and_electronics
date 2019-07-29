@@ -1,0 +1,66 @@
+(export (version D)
+  (design
+    (source D:\Dropbox\code\repositories\badenlab\behavioural-stimulator\PCB\uvled\uv_led.sch)
+    (date "20/07/2018 14:41:59")
+    (tool "Eeschema 4.0.7")
+    (sheet (number 1) (name /) (tstamps /)
+      (title_block
+        (title)
+        (company)
+        (rev)
+        (date)
+        (source uv_led.sch)
+        (comment (number 1) (value ""))
+        (comment (number 2) (value ""))
+        (comment (number 3) (value ""))
+        (comment (number 4) (value "")))))
+  (components
+    (comp (ref D1)
+      (value LED)
+      (footprint Resistors_Universal:Resistor_SMD+THTuniversal_0805to2512_RM10_HandSoldering)
+      (libsource (lib device) (part LED))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 5B51B6AA))
+    (comp (ref J1)
+      (value Conn_01x02_Female)
+      (footprint Socket_Strips:Socket_Strip_Straight_1x02_Pitch2.54mm)
+      (libsource (lib conn) (part Conn_01x02_Female))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 5B51B72A)))
+  (libparts
+    (libpart (lib conn) (part Conn_01x02_Female)
+      (description "Generic connector, single row, 01x02")
+      (docs ~)
+      (footprints
+        (fp Connector*:*_??x*mm*)
+        (fp Connector*:*1x??x*mm*)
+        (fp Socket?Strip?Straight?1X*)
+        (fp Socket?Strip?Angled?1X*))
+      (fields
+        (field (name Reference) J)
+        (field (name Value) Conn_01x02_Female))
+      (pins
+        (pin (num 1) (name Pin_1) (type passive))
+        (pin (num 2) (name Pin_2) (type passive))))
+    (libpart (lib device) (part LED)
+      (description "LED generic")
+      (footprints
+        (fp LED*))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) LED))
+      (pins
+        (pin (num 1) (name K) (type passive))
+        (pin (num 2) (name A) (type passive)))))
+  (libraries
+    (library (logical device)
+      (uri "D:\\Program Files\\KiCad\\share\\kicad\\library\\device.lib"))
+    (library (logical conn)
+      (uri "D:\\Program Files\\KiCad\\share\\kicad\\library\\conn.lib")))
+  (nets
+    (net (code 1) (name GND)
+      (node (ref D1) (pin 1))
+      (node (ref J1) (pin 1)))
+    (net (code 2) (name +3V3)
+      (node (ref D1) (pin 2))
+      (node (ref J1) (pin 2)))))
