@@ -1,0 +1,641 @@
+// ThorLabs Optical components
+
+  // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // Switches // // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // 
+
+    LCP02M = 0; // LCP02/M
+    LCP01TM = 0; // LCP01T/M
+    CP02M = 0; // CP02/M
+    CP02TM = 0; // CP02T/M
+    CP11 = 0; // CP11
+    CP12 = 0; // CP12
+    
+    x_Translational_Platform = 0; // MTB/M
+    y_Translational_Platform = 0; // MTB/M
+    z_Translational_Platform = 0; // MVS005/M
+
+  // // // // // // // // // // // // // // // // // //    
+ // // // // // User Parameters// // // // // // // //
+// // // // // // // // // // // // // // // // // //
+
+Smoothness = 30; // A value of 360 is recommended for a smooth print
+tol = 0.1; // Tolerance value, set by default to 0.1 for Ultimaker2 printer
+tol2 = 0.15; // Use for translational slots
+
+sep = 75; // Separtion between objects (75 by default for proper display)
+sep_plat = 00; // Separation between the objects of the Platform() module
+
+ // // // // // // // // // // // // // // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // //  Standardised modules for ThorLabs optical mounting systems // // 
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+Walls = 2; //Wall thickness (applied only to certain modules
+rod_pos1 = 30/2; // Rod position for 30mm cage system
+rod_pos2 = 60/2; // Rod position for 60mm cage system
+x_screw_pos1 = 22.75/2; // Screw position for rods on 30mm cage system
+x_screw_pos2 = 53/2; // Screw position for rods on 60mm cage system
+r_rod = 6.1/2 + tol; // Rod radius 0.25 inch
+S4 = 2.85/2 + tol/2; // ThorLabs small holding screws 0.05 inch
+M4 = 3.85/2 + tol/2; //M4 screw
+M4nut = 8/2; //M4 screw
+width_M4 = 6.9; //M4 screw
+h_M4nut = 3.1; //M4 screw
+M4_screw_head =  2.9;//M4 screw head
+M6 = 5.9/2 + tol/2; //M4 screw
+r_lens_05_inch = 12.7/2 + 3.2*tol; //ThorLabs 0.5 inch diameter lens
+r_lens_1_inch = 25.4/2 + 3.2*tol; //ThorLabs 1 inch diameter lens
+r_lens_12_inch = 30/2 + 3.2*tol; //ThorLabs 1.2 inch diameter lens 
+r_lens_2_inch = 50.8/2 + 3.2*tol; //ThorLabs 2 inch diameter lens
+r_lens_3_inch = 76.2/2 + 3.2*tol; //ThorLabs 3 inch diameter lens
+
+module small_rod_cage(){
+    translate([rod_pos1,rod_pos1,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//int rod hole
+    translate([rod_pos1,-rod_pos1,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//int rod hole
+    translate([-rod_pos1,-rod_pos1,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//int rod hole
+    translate([-rod_pos1,rod_pos1,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//int rod hole
+} //30mm cage mounting system
+module big_rod_cage(){
+    translate([rod_pos2,rod_pos2,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//ext rod hole
+    translate([rod_pos2,-rod_pos2,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//ext rod hole
+    translate([-rod_pos2,-rod_pos2,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//ext rod hole
+    translate([-rod_pos2,rod_pos2,0])cylinder(r=r_rod, h=200, $fn=Smoothness);//ext rod hole
+} //60mm cage mounting system
+
+// // // // // // // // // // // // // // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  LCP02/M // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+X_LCP02 = 70.6; //outer cube length
+x_LCP02 = 40.75; //inner cube length
+h_LCP02 = 12.70; //module thickness
+x_arm = 15.15; //arm width
+y_arm = 100; //arm length
+x_ext_LCP02 = 96.3; //module diagonal length
+h_screw_pos_LCP02 = 3;
+
+
+
+module pos_LCP02M(){
+    translate([-x_LCP02/2,-x_LCP02/2,0])cube([x_LCP02,x_LCP02,h_LCP02]);// Inner cube
+    
+    difference(){
+        union(){
+            rotate([0,0,45])translate([-y_arm/2,-x_arm/2,0])cube([y_arm,x_arm,h_LCP02]);//diagonal arm
+            rotate([0,0,45])translate([-x_arm/2,-y_arm/2,0])cube([x_arm,y_arm,h_LCP02]);//diagonal arm
+        }
+        translate([-X_LCP02/2,X_LCP02/2,0])cube([X_LCP02,x_arm,h_LCP02]); //arm edge
+        translate([-X_LCP02/2,-X_LCP02/2-x_arm,0])cube([X_LCP02,x_arm,h_LCP02]); //arm edge
+        translate([-X_LCP02/2-x_arm,-X_LCP02/2,0])cube([x_arm,X_LCP02,h_LCP02]); //arm edge
+        translate([X_LCP02/2,-X_LCP02/2,0])cube([x_arm,X_LCP02,h_LCP02]); //arm edge
+        rotate([0,0,45])translate([-x_ext_LCP02/2,x_ext_LCP02/2,0])cube([x_ext_LCP02,x_arm,h_LCP02]); //arm edge
+        rotate([0,0,45])translate([-x_ext_LCP02/2,-x_ext_LCP02/2-x_arm,0])cube([x_ext_LCP02,x_arm,h_LCP02]); //arm edge
+        rotate([0,0,45])translate([-x_ext_LCP02/2-x_arm,-x_ext_LCP02/2,0])cube([x_arm,x_ext_LCP02,h_LCP02]); //arm edge
+        rotate([0,0,45])translate([x_ext_LCP02/2,-x_ext_LCP02/2,0])cube([x_arm,x_ext_LCP02,h_LCP02]); //arm edge
+    }
+}
+module neg_LCP02M(){
+    cylinder(r=r_lens_1_inch, h=h_LCP02, $fn=Smoothness);//Main lens hole
+    small_rod_cage();
+    big_rod_cage();
+    
+    translate([0,-x_LCP02/2,h_LCP02/2])rotate([-90,0,0])cylinder(r=M4, h=x_LCP02/2, $fn=Smoothness); //Module holding screw
+    
+    translate([-x_LCP02/2,0,h_LCP02/2])rotate([0,90,0])cylinder(r=S4, h=x_LCP02, $fn=Smoothness); //Lens holding screw
+    translate([0,-x_LCP02/2,h_LCP02/2])rotate([-90,0,0])cylinder(r=S4, h=x_LCP02, $fn=Smoothness); //Lens holding screw
+    
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    
+    translate([-x_screw_pos2,-rod_pos2+r_rod/2,h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([-x_screw_pos2,-rod_pos2+r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([x_screw_pos2,-rod_pos2+r_rod/2,h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([x_screw_pos2,-rod_pos2+r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    
+    translate([-x_screw_pos2,rod_pos2-r_rod/2,h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([-x_screw_pos2,rod_pos2-r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([x_screw_pos2,rod_pos2-r_rod/2,h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+    translate([x_screw_pos2,rod_pos2-r_rod/2,h_LCP02-h_screw_pos_LCP02])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //big cage rod holding screw
+}
+
+if (LCP02M == 1){difference(){
+    pos_LCP02M ();
+    neg_LCP02M ();
+}}
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  LCP01T/M // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_LCP01TM = 71.1; //module length
+h_LCP01TM = 22.9; //module thickness
+h_screw_pos_LCP01TM = 5;
+x_ext_LCP01TM = 97; //module diagonal length
+
+module pos_LCP01TM(){
+    difference(){
+        translate([-x_LCP01TM/2,-x_LCP01TM/2,0])cube([x_LCP01TM,x_LCP01TM,h_LCP01TM]);//main body
+        rotate([0,0,45]){
+            translate([-x_ext_LCP01TM/2,-x_ext_LCP01TM/2-20,0])cube([x_ext_LCP01TM,20,h_LCP01TM]);//module edge
+            translate([-x_ext_LCP01TM/2,x_ext_LCP01TM/2,0])cube([x_ext_LCP01TM,20,h_LCP01TM]); //module edge    
+            translate([-x_ext_LCP01TM/2-20,-x_ext_LCP01TM/2,0])cube([20,x_ext_LCP01TM,h_LCP01TM]); //module edge
+            translate([x_ext_LCP01TM/2,-x_ext_LCP01TM/2,0])cube([20,x_ext_LCP01TM,h_LCP01TM]); //module edge
+        }
+    }
+}
+module neg_LCP01TM(){
+    cylinder(r=r_lens_2_inch, h=h_LCP01TM, $fn=Smoothness); //Lens hole
+    big_rod_cage();
+    
+    translate([0,-x_LCP01TM/2,h_LCP01TM/2])rotate([-90,0,0])cylinder(r=M4, h=x_LCP01TM/2, $fn=Smoothness); // Module holding screw
+    
+    translate([0,-x_LCP01TM/2,h_LCP01TM/2])rotate([-90,0,0])cylinder(r=S4, h=x_LCP01TM, $fn=Smoothness); //Lens holding screw
+    translate([-x_LCP01TM/2,0,h_LCP01TM/2])rotate([0,90,0])cylinder(r=S4, h=x_LCP01TM, $fn=Smoothness); //Lens holding screw
+    
+    
+    
+    translate([x_screw_pos2,rod_pos2-r_rod/2,h_screw_pos_LCP01TM])rotate([-90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([x_screw_pos2,rod_pos2-r_rod/2,h_LCP01TM-h_screw_pos_LCP01TM])rotate([-90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([-x_screw_pos2,rod_pos2-r_rod/2,h_screw_pos_LCP01TM])rotate([-90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([-x_screw_pos2,rod_pos2-r_rod/2,h_LCP01TM-h_screw_pos_LCP01TM])rotate([-90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    
+    translate([x_screw_pos2,-rod_pos2+r_rod/2,h_screw_pos_LCP01TM])rotate([90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([x_screw_pos2,-rod_pos2+r_rod/2,h_LCP01TM-h_screw_pos_LCP01TM])rotate([90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([-x_screw_pos2,-rod_pos2+r_rod/2,h_screw_pos_LCP01TM])rotate([90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+    translate([-x_screw_pos2,-rod_pos2+r_rod/2,h_LCP01TM-h_screw_pos_LCP01TM])rotate([90,0,0])cylinder(r=S4, h=x_LCP01TM/2, $fn=Smoothness);//big cage rod holding screw
+}
+
+if (LCP01TM == 1){translate([sep,0,0])difference(){
+    pos_LCP01TM ();
+    neg_LCP01TM ();
+}}
+
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  CP02/M // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_CP02M = 40.6; //module length
+h_CP02M = 9.0; //module thickness
+x_ext_CP02M = 54.3; //module diagonal length
+
+module pos_CP02M(){
+    difference(){
+        translate([-x_CP02M/2,-x_CP02M/2,0])cube([x_CP02M,x_CP02M,h_CP02M]);//main body
+        rotate([0,0,45]){
+            translate([-x_ext_CP02M/2,-x_ext_CP02M/2-20,0])cube([x_ext_CP02M,20,h_CP02M]);//module edge
+            translate([-x_ext_CP02M/2,x_ext_CP02M/2,0])cube([x_ext_CP02M,20,h_CP02M]); //module edge    
+            translate([-x_ext_CP02M/2-20,-x_ext_CP02M/2,0])cube([20,x_ext_CP02M,h_CP02M]); //module edge
+            translate([x_ext_CP02M/2,-x_ext_CP02M/2,0])cube([20,x_ext_CP02M,h_CP02M]); //module edge
+        }
+    }
+}
+module neg_CP02M(){
+    cylinder(r=r_lens_1_inch, h=h_CP02M, $fn=Smoothness); //Lens hole
+    small_rod_cage();
+    
+    translate([0,-x_CP02M/2,h_CP02M/2])rotate([-90,0,0])cylinder(r=M4, h=x_CP02M/2, $fn=Smoothness); // Module holding screw
+    
+    translate([0,-x_CP02M/2,h_CP02M/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP02M, $fn=Smoothness); //Lens holding screw
+    translate([-x_CP02M/2,0,h_CP02M/2])rotate([0,90,0])cylinder(r=S4, h=x_CP02M, $fn=Smoothness); //Lens holding screw
+    
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_CP02M/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP02M/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_CP02M-h_CP02M/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP02M/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_CP02M/2])rotate([90,0,0])cylinder(r=S4, h=x_CP02M/2, $fn=Smoothness);//small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_CP02M-h_CP02M/2])rotate([90,0,0])cylinder(r=S4, h=x_CP02M/2, $fn=Smoothness);//small cage rod holding screw
+}
+
+if (CP02M == 1){translate([-sep,sep,0])difference(){
+    pos_CP02M ();
+    neg_CP02M ();
+}}
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  CP02T/M // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_CP02TM = 40.6; //module length
+h_CP02TM = 12.50; //module thickness
+x_ext_CP02TM = 54.3; //module diagonal length
+h_screw_pos_CP02TM = 3;
+
+module pos_CP02TM(){
+    difference(){
+        translate([-x_CP02TM/2,-x_CP02TM/2,0])cube([x_CP02TM,x_CP02TM,h_CP02TM]);//main body
+        rotate([0,0,45]){
+            translate([-x_ext_CP02TM/2,-x_ext_CP02TM/2-20,0])cube([x_ext_CP02TM,20,h_CP02TM]);//module edge
+            translate([-x_ext_CP02TM/2,x_ext_CP02TM/2,0])cube([x_ext_CP02TM,20,h_CP02TM]); //module edge    
+            translate([-x_ext_CP02TM/2-20,-x_ext_CP02TM/2,0])cube([20,x_ext_CP02TM,h_CP02TM]); //module edge
+            translate([x_ext_CP02TM/2,-x_ext_CP02TM/2,0])cube([20,x_ext_CP02TM,h_CP02TM]); //module edge
+        }
+    }
+}
+module neg_CP02TM(){
+    cylinder(r=r_lens_1_inch, h=h_CP02TM, $fn=Smoothness); //Lens hole
+    small_rod_cage();
+    
+    translate([0,-x_CP02TM/2,h_CP02TM/2])rotate([-90,0,0])cylinder(r=M4, h=x_CP02TM/2, $fn=Smoothness); // Module holding screw
+    
+    translate([0,-x_CP02TM/2,h_CP02TM/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP02TM, $fn=Smoothness); //Lens holding screw
+    translate([-x_CP02TM/2,0,h_CP02TM/2])rotate([0,90,0])cylinder(r=S4, h=x_CP02TM, $fn=Smoothness); //Lens holding screw
+    
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_screw_pos_CP02TM])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_CP02TM -h_screw_pos_CP02TM ])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_screw_pos_CP02TM ])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_CP02TM -h_screw_pos_CP02TM])rotate([90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_screw_pos_CP02TM ])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_CP02TM -h_screw_pos_CP02TM ])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_screw_pos_CP02TM ])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_CP02TM -h_screw_pos_CP02TM ])rotate([-90,0,0])cylinder(r=S4, h=y_arm/2, $fn=Smoothness); //small cage rod holding screw
+}
+
+if (CP02TM == 1){translate([-sep,0,0])difference(){
+    pos_CP02TM ();
+    neg_CP02TM ();
+}}
+
+
+// // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  CP12 // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_CP12 = 40.6; //module length
+h_CP12 = 8.9; //module thickness
+x_ext_CP12 = 54.3; //module diagonal length
+
+module pos_CP12(){
+    difference(){
+        translate([-x_CP12/2,-x_CP12/2,0])cube([x_CP12,x_CP12,h_CP12]);//main body
+        rotate([0,0,45]){
+            translate([-x_ext_CP12/2,-x_ext_CP12/2-20,0])cube([x_ext_CP12,20,h_CP12]);//module edge
+            translate([-x_ext_CP12/2,x_ext_CP12/2,0])cube([x_ext_CP12,20,h_CP12]); //module edge    
+            translate([-x_ext_CP12/2-20,-x_ext_CP12/2,0])cube([20,x_ext_CP12,h_CP12]); //module edge
+            translate([x_ext_CP12/2,-x_ext_CP12/2,0])cube([20,x_ext_CP12,h_CP12]); //module edge
+        }
+    }
+}
+module neg_CP12(){
+    cylinder(r=r_lens_12_inch, h=h_CP12, $fn=Smoothness); //Lens hole
+    small_rod_cage();
+    
+    //translate([0,-x_CP12/2,h_CP12/2])rotate([-90,0,0])cylinder(r=M4, h=x_CP12/2, $fn=Smoothness); // Module holding screw
+    
+    translate([0,-x_CP12/2,h_CP12/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP12, $fn=Smoothness); //Lens holding screw
+    translate([-x_CP12/2,0,h_CP12/2])rotate([0,90,0])cylinder(r=S4, h=x_CP12, $fn=Smoothness); //Lens holding screw
+    
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_CP12/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP12/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_CP12-h_CP12/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP12/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_CP12/2])rotate([90,0,0])cylinder(r=S4, h=x_CP12/2, $fn=Smoothness);//small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_CP12-h_CP12/2])rotate([90,0,0])cylinder(r=S4, h=x_CP12/2, $fn=Smoothness);//small cage rod holding screw
+}
+
+if (CP12 == 1){translate([0,sep,0])difference(){
+    pos_CP12 ();
+    neg_CP12 ();
+}}
+
+
+// // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // // // // //  CP11 // // // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_CP11 = 40.6; //module length
+h_CP11 = 8.9; //module thickness
+x_ext_CP11 = 54.3; //module diagonal length
+
+module pos_CP11(){
+    difference(){
+        translate([-x_CP11/2,-x_CP11/2,0])cube([x_CP11,x_CP11,h_CP11]);//main body
+        rotate([0,0,45]){
+            translate([-x_ext_CP11/2,-x_ext_CP11/2-20,0])cube([x_ext_CP11,20,h_CP11]);//module edge
+            translate([-x_ext_CP11/2,x_ext_CP11/2,0])cube([x_ext_CP11,20,h_CP11]); //module edge    
+            translate([-x_ext_CP11/2-20,-x_ext_CP11/2,0])cube([20,x_ext_CP11,h_CP11]); //module edge
+            translate([x_ext_CP11/2,-x_ext_CP11/2,0])cube([20,x_ext_CP11,h_CP11]); //module edge
+        }
+    }
+}
+module neg_CP11(){
+    cylinder(r=r_lens_05_inch, h=h_CP11, $fn=Smoothness); //Lens hole
+    small_rod_cage();
+    
+    //translate([0,-x_CP11/2,h_CP12/2])rotate([-90,0,0])cylinder(r=M4, h=x_CP11/2, $fn=Smoothness); // Module holding screw
+    
+    translate([0,-x_CP11/2,h_CP11/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP11, $fn=Smoothness); //Lens holding screw
+    translate([-x_CP11/2,0,h_CP12/2])rotate([0,90,0])cylinder(r=S4, h=x_CP11, $fn=Smoothness); //Lens holding screw
+    
+    translate([x_screw_pos1,rod_pos1-r_rod/2,h_CP11/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP11/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,rod_pos1-r_rod/2,h_CP11-h_CP11/2])rotate([-90,0,0])cylinder(r=S4, h=x_CP11/2, $fn=Smoothness);//small cage rod holding screw
+    translate([-x_screw_pos1,-rod_pos1+r_rod/2,h_CP11/2])rotate([90,0,0])cylinder(r=S4, h=x_CP11/2, $fn=Smoothness);//small cage rod holding screw
+    translate([x_screw_pos1,-rod_pos1+r_rod/2,h_CP11-h_CP11/2])rotate([90,0,0])cylinder(r=S4, h=x_CP11/2, $fn=Smoothness);//small cage rod holding screw
+}
+
+if (CP11 == 1){translate([sep,sep,0])difference(){
+    pos_CP11 ();
+    neg_CP11 ();
+}}
+
+
+  // // // // // // // // // // // // // // // // // // // // // // // //
+ // // // // // // //  Translational Platform // // // // // // // // //
+// // // // // // // // // // // // // // // // // // // // // // // //
+
+x_plat = 61 ;
+y_plat = 73.3 ;
+z_plat = 8;
+x_plat1 = 61 + 2*Walls;
+h_plat1 = 5.6;
+h_plat2 = 15;
+plat_screw_pos = 12.5;
+x_plat_extens = 25.75;
+h_plat_extens1 = 5.5;
+h_plat_extens2 = 20.5;
+h_plat_extens3 = 18;
+wall_extens = 10.25;
+h_platz = 45;
+x_platz = 11.25;
+platz_extens = 21.5;
+z_screw_pos = 7;
+y_stage = 34;
+
+
+module pos_plat1(){
+    translate([-x_plat/2-Walls-tol,-x_plat1/2-tol,0])cube([x_plat+2*Walls+2*tol,x_plat1+2*tol,h_plat1]);//Base
+    translate([-x_plat/2-Walls-tol,-x_plat1/2-tol,h_plat1])cube([x_plat+2*Walls+2*tol,Walls,h_plat2+tol]);//Left Wall
+    translate([-x_plat/2-Walls-tol,x_plat1/2-Walls+tol,h_plat1])cube([x_plat+2*Walls+2*tol,Walls,h_plat2+tol]);//Right Wall
+    
+    translate([x_plat/2+Walls+tol,-x_plat_extens/2,0])cube([x_plat_extens,x_plat_extens,h_plat_extens1]);//Extension Base
+    difference(){
+        translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens,-x_plat_extens/2,0])cube([wall_extens,x_plat_extens,h_plat_extens2]);//Extension Wall
+        translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens,-x_plat_extens/2,h_plat_extens3])rotate([45,0,0])cube([wall_extens,x_plat_extens,h_plat_extens2]);//Extension Wall cut-off
+        mirror([0,1,0])translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens,-x_plat_extens/2,h_plat_extens3])rotate([45,0,0])cube([wall_extens,x_plat_extens,h_plat_extens2]);//Extension Wall cut-off      
+    }
+  
+  
+      difference(){
+        translate([-x_plat/2-Walls-tol,x_plat/2+tol,h_plat1+h_plat2/2-Walls])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,2*Walls-tol,2*Walls-tol]);
+        translate([-x_plat/2-Walls-tol,x_plat/2+Walls,h_plat1+h_plat2/2])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+        translate([-x_plat/2-Walls-tol,x_plat/2-2*Walls,h_plat1+h_plat2/2+tol])cube([x_plat+2*Walls+2*tol,2*Walls+tol,2*Walls]); 
+    }// mid height translational slot  
+    
+      mirror([0,1,0])difference(){
+        translate([-x_plat/2-Walls-tol,x_plat/2+tol,h_plat1+h_plat2/2-Walls])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,2*Walls-tol,2*Walls-tol]);
+        translate([-x_plat/2-Walls-tol,x_plat/2+Walls,h_plat1+h_plat2/2])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+        translate([-x_plat/2-Walls-tol,x_plat/2-2*Walls,h_plat1+h_plat2/2+tol])cube([x_plat+2*Walls+2*tol,2*Walls+tol,2*Walls]); 
+    }// mid height translational slot
+}
+
+module neg_plat1(){
+    translate([-x_plat/2-Walls-tol,-x_plat1/2-tol+Walls,h_plat1+h_plat2-Walls])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,Walls,2*Walls]);//Left Slot
+    mirror([0,1,0])translate([-x_plat/2-Walls-tol,-x_plat1/2-tol+Walls,h_plat1+h_plat2-Walls])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,Walls,2*Walls]);//Right Slot
+   
+    
+    translate([-x_plat/2-Walls-tol,0,h_plat1+h_plat2/2])rotate([0,90,0])cylinder(r=M4+2*tol,h=x_plat+2*Walls+2*tol+x_plat_extens,$fn=Smoothness);//Translational stage screw
+    
+    
+    translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens/4-h_M4nut/2,0,h_plat1+h_plat2/2])rotate([0,90,0])cylinder(r=M4nut+tol,h=h_M4nut+tol,$fn=6);//Translational stage screw nut
+    translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens/4-h_M4nut/2,-width_M4/2-tol,h_plat1+h_plat2/2])cube([h_M4nut+tol,width_M4+2*tol,h_plat2]);//Translational stage screw nut
+    
+    translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens*3/4-h_M4nut/2,0,h_plat1+h_plat2/2])rotate([0,90,0])cylinder(r=M4nut+tol,h=h_M4nut+tol,$fn=6);//Translational stage screw nut
+    translate([x_plat/2+Walls+tol+x_plat_extens-wall_extens*3/4-h_M4nut/2,-width_M4/2-tol,h_plat1+h_plat2/2])cube([h_M4nut+tol,width_M4+2*tol,h_plat2]);//Translational stage screw nut
+    
+    
+    cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,0,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,0,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([0,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([0,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+}
+
+if (x_Translational_Platform==1){translate([0,-sep,0])translate([0,0,z_plat+h_platz+wall_extens+2*tol+1.5*sep_plat]){difference(){
+        pos_plat1();
+        neg_plat1();
+}}}
+
+
+module pos_plat2(){
+    translate([-x_plat/2-Walls-tol,-x_plat/2,0])cube([x_plat+2*Walls+2*tol,x_plat,h_plat2]);//Base
+    difference(){
+        union(){
+            translate([-x_plat/2-Walls-tol,-x_plat1/2+Walls,h_plat2-Walls-tol])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,Walls,2*Walls]);//Left Wall slot
+            mirror([0,1,0])translate([-x_plat/2-Walls-tol,-x_plat1/2+Walls,h_plat2-Walls-tol])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,Walls,2*Walls]);//Right Wall slot
+        }
+        translate([-x_plat/2-Walls-tol,-x_plat1/2-Walls,h_plat2])cube([x_plat+2*Walls+2*tol,x_plat1+2*Walls,2*Walls]);//Slots cut-off
+    }
+        
+}
+
+module neg_plat2(){
+    
+    difference(){
+        translate([-x_plat/2-Walls-tol,x_plat/2,h_plat2/2-Walls-tol])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+        translate([-x_plat/2-Walls-tol,x_plat/2-2*Walls,h_plat2/2+tol])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+    }// mid height translational slot
+    mirror([0,1,0])difference(){
+        translate([-x_plat/2-Walls-tol,x_plat/2,h_plat2/2-Walls-tol])rotate([45,0,0])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+        translate([-x_plat/2-Walls-tol,x_plat/2-2*Walls,h_plat2/2+tol])cube([x_plat+2*Walls+2*tol,2*Walls,2*Walls]);
+    }// mid height translational slot  
+    
+    translate([0,plat_screw_pos,0])cylinder(r=10.5/2, h=h_plat2, $fn=Smoothness); //Mounting Screw
+    translate([0,-plat_screw_pos,0])cylinder(r=10.5/2, h=h_plat2, $fn=Smoothness); //Mounting Screw
+    
+    translate([-x_plat/2-Walls-tol,0,h_plat2/2])rotate([0,90,0])cylinder(r=M4+2*tol,h=x_plat+2*Walls+2*tol,$fn=Smoothness);//Translational stage screw
+    translate([-x_plat/2-Walls-tol,0,h_plat2/2])rotate([0,90,0])cylinder(r=width_M4/2+tol,h=x_plat/2+tol+Walls+M4_screw_head/2,$fn=Smoothness);//Translational stage screw head
+    translate([-x_plat/2-Walls-tol,-3*Walls,h_plat2/2-Walls/2])cube([Walls,6*Walls,Walls]);//Translational stage screw head cover
+    
+
+    translate([plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([0,2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([2*plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([2*plat_screw_pos,2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-2*plat_screw_pos,2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-2*plat_screw_pos,plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-2*plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-2*plat_screw_pos,-2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([-plat_screw_pos,-2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([0,-2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([plat_screw_pos,-2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([2*plat_screw_pos,-2*plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+    translate([2*plat_screw_pos,-plat_screw_pos,0])cylinder(r=M6, h=h_plat2, $fn=Smoothness); //Holding Screw
+}
+
+if (x_Translational_Platform==1){translate([0,-sep,0])translate([0,0,h_plat1+tol+sep_plat+z_plat+h_platz+wall_extens+2*tol+1.5*sep_plat]){difference(){
+    pos_plat2();
+    neg_plat2();
+}}}
+
+module pos_handle_plat(){
+    cylinder(r=M4nut+Walls+tol,h=2*h_M4nut+Walls,$fn=Smoothness);
+    translate([0,0,2*h_M4nut-Walls])cylinder(r=M4nut+2*Walls,h=10*Walls,$fn=8);
+}
+
+module neg_handle_plat(){
+    cylinder(r=M4nut+tol,h=2*h_M4nut+Walls,$fn=6);
+}
+
+if (x_Translational_Platform==1){translate([0,-sep,0])translate([x_plat/2+x_plat_extens+Walls+2*tol+sep_plat,0,h_plat1+h_plat2/2+z_plat+h_platz+wall_extens+2*tol+1.5*sep_plat])rotate([90,0,90]){difference(){
+    pos_handle_plat();
+    neg_handle_plat();
+}}}
+
+module screw_cover(){
+    rotate([0,90,0])cylinder(r=width_M4/2+tol/2,h=x_plat/2+Walls+tol-M4_screw_head/2,$fn=Smoothness);//Translational stage screw head
+    translate([0,-3*Walls+tol/2,0-Walls/2+tol/2])cube([Walls,6*Walls-tol,Walls-tol]);//Translational stage screw head cover
+}
+if (x_Translational_Platform==1){translate([0,-sep,0])translate([-x_plat/2-Walls-tol-2*sep_plat,0,h_plat1+h_plat2/2+tol+1.5*sep_plat+z_plat+h_platz+wall_extens+2*tol]){difference(){
+    screw_cover();   
+}}}
+
+// y platform ///
+
+if (y_Translational_Platform==1){translate([0,-sep,0])rotate([0,0,-90])translate([0,0,h_plat1+h_plat2+2*tol+3*sep_plat+z_plat+h_platz+wall_extens+2*tol]){difference(){
+        pos_plat1();
+        neg_plat1();
+}}}
+if (y_Translational_Platform==1){translate([0,-sep,0])rotate([0,0,-90])translate([0,0,h_plat1+h_plat2+2*tol+3*sep_plat+h_plat1+tol+sep_plat+z_plat+h_platz+wall_extens+2*tol]){difference(){
+    pos_plat2();
+    neg_plat2();
+}}}
+if (y_Translational_Platform==1){translate([0,-sep,0])rotate([0,0,-90])translate([0,0,h_plat1+h_plat2+2*tol+3*sep_plat+z_plat+h_platz+wall_extens+2*tol])translate([x_plat/2+x_plat_extens+Walls+2*tol+sep_plat,0,h_plat1+h_plat2/2])rotate([90,0,90]){difference(){
+    pos_handle_plat();
+    neg_handle_plat();
+}}}
+
+//// z platform ///
+
+module pos_platz(){
+    translate([-x_plat/2,0,0])cube([x_plat,x_plat,z_plat]); //Base
+    translate([-x_plat/2,x_plat/2,z_plat])cube([x_plat,x_platz,h_platz]); //Base support
+    
+    difference(){
+        union(){
+            translate([-x_plat/4,x_plat,z_plat])rotate([117.5,0,0])cube([2.5*Walls,x_plat-x_platz,h_platz]); // Arc Support
+            translate([x_plat/2-x_plat/4-2.5*Walls,x_plat,z_plat])rotate([117.5,0,0])cube([2.5*Walls,x_plat-x_platz,h_platz]); // Arc Support
+        }
+        translate([-x_plat/2,-100,0])cube([x_plat,x_plat/2+100,100]); // Arc Support
+        translate([-x_plat/2,0,-100])cube([100,100,100]); // Arc Support
+    } // Base Support
+}
+
+module neg_platz(){
+    
+    translate([-x_plat/2+2*Walls-tol2,x_plat/2,z_plat])cube([x_plat-4*Walls+2*tol2,2*Walls+tol,h_platz+z_plat]);// Platform Square Slot
+    difference(){
+        translate([-x_plat/2+Walls-tol2,x_plat/2+Walls,z_plat])cube([Walls+tol2,Walls+tol,h_platz+z_plat]);
+        translate([-x_plat/2+2*Walls-tol2,x_plat/2+Walls,z_plat])rotate([0,0,125])cube([2*Walls,Walls+tol2,h_platz+z_plat]);
+    } // Platform Slot
+    mirror([1,0,0])difference(){
+        translate([-x_plat/2+Walls-tol2,x_plat/2+Walls,z_plat])cube([Walls+tol2,Walls+tol,h_platz+z_plat]);
+        translate([-x_plat/2+2*Walls-tol2,x_plat/2+Walls,z_plat])rotate([0,0,125])cube([2*Walls,Walls+tol2,h_platz+z_plat]);
+    } // Platform Slot
+    
+    translate([-2*plat_screw_pos,x_plat/2-2*plat_screw_pos,0])cylinder(r=M6, h=2*z_plat,$fn=Smoothness); // Base holding screw
+    translate([-2*plat_screw_pos,x_plat/2+2*plat_screw_pos,0])cylinder(r=M6, h=2*z_plat,$fn=Smoothness); // Base holding screw
+    translate([2*plat_screw_pos,x_plat/2-2*plat_screw_pos,0])cylinder(r=M6, h=2*z_plat,$fn=Smoothness); // Base holding screw
+    translate([+2*plat_screw_pos,x_plat/2+2*plat_screw_pos,0])cylinder(r=M6, h=2*z_plat,$fn=Smoothness); // Base holding screw
+    translate([0,x_plat/2+2*plat_screw_pos,0])cylinder(r=M6, h=2*z_plat,$fn=Smoothness); // Base holding screw
+    
+    translate([0,x_plat/2-2*plat_screw_pos,0])cylinder(r=M4+tol, h=z_plat, $fn=Smoothness); //Translational bolt
+    translate([0,x_plat/2-2*plat_screw_pos,0])cylinder(r=M4_screw_head+tol, h=M4_screw_head, $fn=Smoothness); //Translational bolt
+}
+if (z_Translational_Platform==1){translate([0,-sep,0])translate([0,-x_plat/2+3/2*Walls-plat_screw_pos,0])difference(){
+    pos_platz();
+    neg_platz();
+}}
+ 
+module pos_holderz(){
+    translate([-x_plat/2+2*Walls+tol,x_plat/2-tol,0])cube([x_plat-4*Walls-2*tol,2*Walls,h_platz-tol]);// Platform Slot
+     
+    difference(){
+        translate([-x_plat/2+Walls,x_plat/2+Walls-tol,0])cube([Walls+tol,Walls,h_platz-tol]);
+        translate([-x_plat/2+2*Walls+tol,x_plat/2+Walls,0])rotate([0,0,125])cube([2*Walls,2*Walls,h_platz-tol]);
+    }// Platform Slot
+    mirror([1,0,0])difference(){
+        translate([-x_plat/2+Walls,x_plat/2+Walls-tol,0])cube([Walls+tol,Walls,h_platz-tol]);
+        translate([-x_plat/2+2*Walls+tol,x_plat/2+Walls,0])rotate([0,0,125])cube([2*Walls,2*Walls,h_platz-tol]);
+    }// Platform Slot
+    
+    translate([-x_plat/2+2*Walls+tol,x_plat/2-2/3*x_platz,0])cube([x_plat-4*Walls-2*tol,2/3*x_platz,h_platz]); // Stage Body
+    translate([-x_plat/2,x_plat/2-2/3*x_platz,h_platz])cube([x_plat,y_stage,wall_extens]);// Stage Body
+    
+    difference(){
+        union(){
+            translate([platz_extens/2-2*Walls,x_plat-y_plat+z_screw_pos+2*Walls+M4,0])cube([2*Walls,y_plat-x_plat+2*Walls+z_screw_pos,h_platz-2*Walls]); // Arc Stage Supports
+            translate([-platz_extens/2,x_plat-y_plat+z_screw_pos+2*Walls+M4,0])cube([2*Walls,y_plat-x_plat+2*Walls+z_screw_pos,h_platz-2*Walls]);// Arc Stage Supports
+            translate([-platz_extens/2,0,0])cube([platz_extens,x_plat/2,wall_extens]);// Stage extension
+        }
+        translate([-platz_extens/2+Walls,0,0])rotate([0,0,125])cube([2*Walls,Walls,wall_extens]);
+        mirror([1,0,0])translate([-platz_extens/2+Walls,0,0])rotate([0,0,125])cube([2*Walls,Walls,wall_extens]);
+        difference(){
+            translate([-platz_extens/2-tol,x_plat-y_plat+z_screw_pos+2*Walls+M4,wall_extens+22])rotate([0,90,0])cylinder(r=22.4,h=platz_extens+tol,$fn=Smoothness);
+            translate([-platz_extens/2,0,wall_extens-Walls])cube([platz_extens,3*Walls,Walls]);
+        }
+        translate([-platz_extens/2,x_plat-y_plat+z_screw_pos+2*Walls+M4,wall_extens+22])cube([platz_extens,24,24]); 
+        }
+
+}
+
+module neg_holderz(){
+    
+    translate([0,x_plat/2-2*plat_screw_pos,0])cylinder(r=M4+tol, h=wall_extens, $fn=Smoothness); //Translational bolt
+    
+    translate([0,x_plat/2-2*plat_screw_pos,wall_extens/4-h_M4nut/2-tol])rotate([0,0,30])cylinder(r=M4nut+tol,h=h_M4nut+tol,$fn=6);//Translational stage screw nut
+    translate([-width_M4/2-tol,0,wall_extens/4-h_M4nut/2-tol])cube([width_M4+2*tol,y_plat-x_plat-z_screw_pos,h_M4nut+tol]);//Translational stage screw nut
+    
+    translate([0,x_plat/2-2*plat_screw_pos,wall_extens*3/4-h_M4nut/2-tol])rotate([0,0,30])cylinder(r=M4nut+tol,h=h_M4nut+tol,$fn=6);//Translational stage screw nut
+    translate([-width_M4/2-tol,0,wall_extens*3/4-h_M4nut/2-tol])cube([width_M4+2*tol,y_plat-x_plat-z_screw_pos,h_M4nut+tol]);//Translational stage screw nut
+   
+    translate([0,x_plat/2-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([plat_screw_pos,x_plat/2-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([-plat_screw_pos,x_plat/2-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([plat_screw_pos,x_plat/2+plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([-plat_screw_pos,x_plat/2+plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([0,x_plat/2+plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw 
+    translate([2*plat_screw_pos,x_plat/2-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([-2*plat_screw_pos,x_plat/2-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([2*plat_screw_pos,x_plat/2+plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([-2*plat_screw_pos,x_plat/2+plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([-2*plat_screw_pos,x_plat/2+2*plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([-plat_screw_pos,x_plat/2+2*plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([0,x_plat/2+2*plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([plat_screw_pos,x_plat/2+2*plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M4, h=wall_extens, $fn=Smoothness);//Holding Screw
+    translate([2*plat_screw_pos,x_plat/2+2*plat_screw_pos-3/2*Walls,h_platz+Walls])cylinder(r=M6, h=wall_extens, $fn=Smoothness);//Holding Screw    
+}
+
+if (z_Translational_Platform==1){translate([0,-sep,0])translate([0,-x_plat/2+3/2*Walls-plat_screw_pos,z_plat+tol+sep_plat])difference(){
+    pos_holderz();
+    neg_holderz();
+}}
+if (z_Translational_Platform==1){translate([0,-sep,0])translate([0,-x_plat/2+3/2*Walls-plat_screw_pos,z_plat+tol+1.5*sep_plat])translate([0,x_plat/2-2*plat_screw_pos,wall_extens+tol])difference(){
+    pos_handle_plat();
+    neg_handle_plat();
+}}
